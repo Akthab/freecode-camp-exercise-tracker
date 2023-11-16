@@ -56,16 +56,27 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 		userNewLogs.push(userLog);
 
-		const user = {
+		console.log(
+			'THE RESPONSE username ' +
+				user.username +
+				' User Description ' +
+				userDetails.description +
+				' User Duration ' +
+				userDetails.duration +
+				' Date ' +
+				createdDate.toDateString() +
+				' ID ' +
+				user._id
+		);
+		res.json({
 			username: user.username,
 			description: userDetails.description,
 			duration: userDetails.duration * 60,
 			date: createdDate.toDateString(),
 			_id: user._id,
-		};
-
-		res.json({ user });
+		});
 	} else {
+		console.log('In the error');
 		res.send(`User with ID ${req.params._id} not found`);
 	}
 });
