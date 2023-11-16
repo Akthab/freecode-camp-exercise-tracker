@@ -41,7 +41,12 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 	if (user) {
 		const userDetails = req.body;
-		const createdDate = new Date(userDetails.date);
+
+		let createdDate = new Date();
+
+		if (userDetails.date) {
+			createdDate = new Date(userDetails.date);
+		}
 
 		const userLog = {
 			description: userDetails.description,
@@ -74,9 +79,12 @@ app.get('/api/users/:_id/logs', (req, res) => {
 	}
 
 	if (user) {
-		user.count = userNewLogs.length;
-		user.log = userNewLogs;
-		res.json({ user });
+		res.json({
+			username: user.username,
+			count: userNewLogs.length,
+			_id: user._id,
+			log: userNewLogs,
+		});
 	} else {
 		res.send(`User with ID ${req.params._id} not found`);
 	}
