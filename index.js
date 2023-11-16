@@ -50,7 +50,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 		const userLog = {
 			description: userDetails.description,
-			duration: userDetails.duration,
+			duration: userDetails.duration * 60,
 			date: createdDate.toDateString(),
 		};
 
@@ -59,7 +59,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 		res.json({
 			username: user.username,
 			description: userDetails.description,
-			duration: userDetails.duration,
+			duration: userDetails.duration * 60,
 			date: createdDate.toDateString(),
 			_id: user._id,
 		});
