@@ -21,7 +21,8 @@ app.post('/api/users', (req, res) => {
 		_id: uuidv4(),
 	};
 	users.push(user);
-	res.json('OK');
+
+	res.json({ user });
 });
 
 app.get('/api/users', (req, res) => {
