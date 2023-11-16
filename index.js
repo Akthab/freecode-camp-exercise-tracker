@@ -22,11 +22,11 @@ app.post('/api/users', (req, res) => {
 	};
 	users.push(user);
 
-	res.json({ user });
+	res.json({ username: user.username, _id: user._id });
 });
 
 app.get('/api/users', (req, res) => {
-	res.json({ users });
+	res.json(users);
 });
 
 app.post('/api/users/:_id/exercises', (req, res) => {
