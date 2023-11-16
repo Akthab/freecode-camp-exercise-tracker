@@ -50,28 +50,16 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 		const userLog = {
 			description: userDetails.description,
-			duration: userDetails.duration * 60,
+			duration: userDetails.duration,
 			date: createdDate.toDateString(),
 		};
 
 		userNewLogs.push(userLog);
 
-		console.log(
-			'THE RESPONSE username ' +
-				user.username +
-				' User Description ' +
-				userDetails.description +
-				' User Duration ' +
-				userDetails.duration +
-				' Date ' +
-				createdDate.toDateString() +
-				' ID ' +
-				user._id
-		);
 		res.json({
 			username: user.username,
 			description: userDetails.description,
-			duration: userDetails.duration * 60,
+			duration: userDetails.duration,
 			date: createdDate.toDateString(),
 			_id: user._id,
 		});
