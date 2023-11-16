@@ -56,7 +56,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 		userNewLogs.push(userLog);
 
-		const newUser = {
+		const user = {
 			username: user.username,
 			description: userDetails.description,
 			duration: userDetails.duration * 60,
