@@ -98,7 +98,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
 		// 	(user._id = newUser._id),
 		// 	(user.log = userNewLogs),
 		// 	res.send(user);
-		res.send({
+		res.json({
 			username: user.username,
 			count: userNewLogs.length,
 			_id: user._id,
