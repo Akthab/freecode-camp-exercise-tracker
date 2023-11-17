@@ -81,29 +81,29 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
-	let newUser;
+	let user;
 
 	for (const userObject of users) {
 		if (userObject._id === req.params._id) {
-			newUser = userObject;
+			user = userObject;
 			break;
 		}
 	}
 
 	console.log('TYPE OF ' + typeof userNewLogs);
-	if (newUser) {
-		const user = {};
-		(user.username = newUser.username),
-			(user.count = userNewLogs.length),
-			(user._id = newUser._id),
-			(user.log = userNewLogs),
-			res.send(user);
-		// res.send({
-		// 	username: user.username,
-		// 	count: userNewLogs.length,
-		// 	_id: user._id,
-		// 	log: userNewLogs,
-		// });
+	if (user) {
+		// const user = {};
+		// (user.username = newUser.username),
+		// 	(user.count = userNewLogs.length),
+		// 	(user._id = newUser._id),
+		// 	(user.log = userNewLogs),
+		// 	res.send(user);
+		res.send({
+			username: user.username,
+			count: userNewLogs.length,
+			_id: user._id,
+			log: userNewLogs,
+		});
 	} else {
 		res.send(`User with ID ${req.params._id} not found`);
 	}
