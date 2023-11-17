@@ -92,7 +92,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
 
 	console.log('TYPE OF ' + typeof userNewLogs);
 	if (user) {
-		res.json({
+		res.send({
 			username: user.username,
 			count: userNewLogs.length,
 			_id: user._id,
