@@ -80,6 +80,35 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 	}
 });
 
+// app.get('/api/users/:_id/logs', (req, res) => {
+// 	let user;
+
+// 	for (const userObject of users) {
+// 		if (userObject._id === req.params._id) {
+// 			user = userObject;
+// 			break;
+// 		}
+// 	}
+
+// 	console.log('TYPE OF ' + typeof userNewLogs);
+// 	if (user) {
+// 		// const user = {};
+// 		// (user.username = newUser.username),
+// 		// 	(user.count = userNewLogs.length),
+// 		// 	(user._id = newUser._id),
+// 		// 	(user.log = userNewLogs),
+// 		// 	res.send(user);
+// 		res.json({
+// 			username: user.username,
+// 			count: userNewLogs.length,
+// 			_id: user._id,
+// 			log: userNewLogs,
+// 		});
+// 	} else {
+// 		res.send(`User with ID ${req.params._id} not found`);
+// 	}
+// });
+
 app.get('/api/users/:_id/logs', (req, res) => {
 	let user;
 
@@ -90,19 +119,31 @@ app.get('/api/users/:_id/logs', (req, res) => {
 		}
 	}
 
-	console.log('TYPE OF ' + typeof userNewLogs);
 	if (user) {
-		// const user = {};
-		// (user.username = newUser.username),
-		// 	(user.count = userNewLogs.length),
-		// 	(user._id = newUser._id),
-		// 	(user.log = userNewLogs),
-		// 	res.send(user);
+		let logs = userNewLogs;
+
+		// Filter logs based on from and to dates
+		if (req.query.from && req.query.to) {
+			const fromDate = new Date(req.query.from);
+			const toDate = new Date(req.query.to);
+
+			logs = logs.filter((log) => {
+				const logDate = new Date(log.date);
+				return logDate >= fromDate && logDate <= toDate;
+			});
+		}
+
+		// Limit the number of logs
+		if (req.query.limit) {
+			const limit = parseInt(req.query.limit);
+			logs = logs.slice(0, limit);
+		}
+
 		res.json({
 			username: user.username,
-			count: userNewLogs.length,
+			count: logs.length,
 			_id: user._id,
-			log: userNewLogs,
+			log: logs,
 		});
 	} else {
 		res.send(`User with ID ${req.params._id} not found`);
