@@ -64,7 +64,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 			_id: newUser._id,
 		};
 
-		res.send({ user });
+		res.json(user);
 	} else {
 		console.log('In the error');
 		res.send(`User with ID ${req.params._id} not found`);
