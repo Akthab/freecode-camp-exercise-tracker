@@ -10,7 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 const users = [];
-const userNewLogs = [];
+// const userNewLogs = [];
+const userNewLogs = new Array();
 app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/views/index.html');
 });
@@ -89,6 +90,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
 		}
 	}
 
+	console.log('TYPE OF ' + typeof userNewLogs);
 	if (user) {
 		res.json({
 			username: user.username,
