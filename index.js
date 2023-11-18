@@ -122,20 +122,42 @@ app.get('/api/users/:_id/logs', (req, res) => {
 	console.log('THIS IS THE FROM DATE  ' + req.query.from);
 	console.log('THIS IS THE TO DATE  ' + req.query.to);
 	console.log('THIS IS THE LIMIT  ' + req.query.limit);
+	// const limit = parseInt(req.query.limit);
+	// console.log('THIS IS THE LIMIT  ' + limit);
 
 	if (user) {
 		let logs = userNewLogs;
 
 		// Filter logs based on from and to dates
-		if (req.query.from && req.query.to) {
-			const fromDate = new Date(req.query.from);
-			const toDate = new Date(req.query.to);
+		// if (req.query.from && req.query.to) {
+		// 	const fromDate = new Date(req.query.from);
+		// 	const toDate = new Date(req.query.to);
 
-			logs = logs.filter((log) => {
-				const logDate = new Date(log.date);
-				return logDate >= fromDate && logDate <= toDate;
-			});
+		// 	logs = logs.filter((log) => {
+		// 		const logDate = new Date(log.date);
+		// 		return logDate >= fromDate && logDate <= toDate;
+		// 	});
+		// }
+
+		if (req.query.from) {
+			// let toDate;
+			if (req.query.to) {
+				const fromDate = new Date(req.query.from);
+				const toDate = new Date(req.query.to);
+				logs = logs.filter((log) => {
+					const logDate = new Date(log.date);
+					return logDate >= fromDate && logDate <= toDate;
+				});
+			} else {
+				let toDate = new Date();
+				const fromDate = new Date(req.query.from);
+				logs = logs.filter((log) => {
+					const logDate = new Date(log.date);
+					return logDate >= fromDate && logDate <= toDate;
+				});
+			}
 		}
+		//
 
 		// Limit the number of logs
 		if (req.query.limit) {
