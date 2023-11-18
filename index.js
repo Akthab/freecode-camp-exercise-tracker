@@ -30,6 +30,56 @@ app.get('/api/users', (req, res) => {
 	res.json(users);
 });
 
+// app.post('/api/users/:_id/exercises', (req, res) => {
+// 	let newUser;
+
+// 	for (const userObject of users) {
+// 		if (userObject._id === req.params._id) {
+// 			newUser = userObject;
+// 			break;
+// 		}
+// 	}
+
+// 	if (newUser) {
+// 		const userDetails = req.body;
+
+// 		let createdDate = new Date();
+
+// 		if (userDetails.date) {
+// 			createdDate = new Date(userDetails.date);
+// 		}
+
+// 		const userLog = {
+// 			description: userDetails.description,
+// 			duration: parseInt(userDetails.duration),
+// 			date: createdDate.toDateString(),
+// 		};
+
+// 		userNewLogs.push(userLog);
+
+// 		// const user = {
+// 		// 	username: newUser.username,
+// 		// 	description: userDetails.description,
+// 		// 	duration: userDetails.duration * 60,
+// 		// 	date: createdDate.toDateString(),
+// 		// 	_id: newUser._id,
+// 		// };
+
+// 		const user = {};
+
+// 		console.log('Duration ', typeof userDetails.duration);
+// 		(user.username = newUser.username),
+// 			(user.description = userDetails.description),
+// 			(user.duration = parseInt(userDetails.duration)),
+// 			(user.date = createdDate.toDateString()),
+// 			(user._id = newUser._id),
+// 			res.send(user);
+// 	} else {
+// 		console.log('In the error');
+// 		res.send(`User with ID ${req.params._id} not found`);
+// 	}
+// });
+
 app.post('/api/users/:_id/exercises', (req, res) => {
 	let newUser;
 
@@ -55,17 +105,13 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 			date: createdDate.toDateString(),
 		};
 
-		userNewLogs.push(userLog);
+		if (!newUser.logs) {
+			newUser.logs = []; // Initialize the 'logs' array if it doesn't exist
+		}
 
-		// const user = {
-		// 	username: newUser.username,
-		// 	description: userDetails.description,
-		// 	duration: userDetails.duration * 60,
-		// 	date: createdDate.toDateString(),
-		// 	_id: newUser._id,
-		// };
+		newUser.logs.push(userLog); // Push the exercise log to the user's individual logs array
 
-		const user = {};
+		const user = {}; // No need to create a separate user object
 
 		console.log('Duration ', typeof userDetails.duration);
 		(user.username = newUser.username),
@@ -73,13 +119,12 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 			(user.duration = parseInt(userDetails.duration)),
 			(user.date = createdDate.toDateString()),
 			(user._id = newUser._id),
-			res.send(user);
+			res.send(user); // Send the updated user object
 	} else {
 		console.log('In the error');
 		res.send(`User with ID ${req.params._id} not found`);
 	}
 });
-
 // app.get('/api/users/:_id/logs', (req, res) => {
 // 	let user;
 
@@ -126,7 +171,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
 	// console.log('THIS IS THE LIMIT  ' + limit);
 
 	if (user) {
-		let logs = userNewLogs;
+		let logs = user.logs;
 
 		// Filter logs based on from and to dates
 		// if (req.query.from && req.query.to) {
