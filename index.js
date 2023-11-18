@@ -109,88 +109,90 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 // 	}
 // });
 
+app.get('/api/users/:_id/logs', (req, res) => {
+	let user;
+
+	for (const userObject of users) {
+		if (userObject._id === req.params._id) {
+			user = userObject;
+			break;
+		}
+	}
+
+	console.log('THIS IS THE QUERY  ' + req.query);
+
+	if (user) {
+		let logs = userNewLogs;
+
+		// Filter logs based on from and to dates
+		if (req.query.from && req.query.to) {
+			const fromDate = new Date(req.query.from);
+			const toDate = new Date(req.query.to);
+
+			logs = logs.filter((log) => {
+				const logDate = new Date(log.date);
+				return logDate >= fromDate && logDate <= toDate;
+			});
+		}
+
+		// Limit the number of logs
+		if (req.query.limit) {
+			const limit = parseInt(req.query.limit);
+			logs = logs.slice(0, limit);
+		}
+
+		res.json({
+			username: user.username,
+			count: logs.length,
+			_id: user._id,
+			log: logs,
+		});
+	} else {
+		res.send(`User with ID ${req.params._id} not found`);
+	}
+});
+
 // app.get('/api/users/:_id/logs', (req, res) => {
+// 	const userId = req.params._id;
+// 	const fromDate = req.query.from ? new Date(req.query.from) : undefined;
+// 	const toDate = req.query.to ? new Date(req.query.to) : undefined;
+// 	const limit = parseInt(req.query.limit) || 10;
+
 // 	let user;
 
 // 	for (const userObject of users) {
-// 		if (userObject._id === req.params._id) {
+// 		if (userObject._id === userId) {
 // 			user = userObject;
 // 			break;
 // 		}
 // 	}
 
 // 	if (user) {
-// 		let logs = userNewLogs;
+// 		let filteredLogs = userNewLogs;
+// 		// let filteredLogs = user.logs;
 
-// 		// Filter logs based on from and to dates
-// 		if (req.query.from && req.query.to) {
-// 			const fromDate = new Date(req.query.from);
-// 			const toDate = new Date(req.query.to);
-
-// 			logs = logs.filter((log) => {
-// 				const logDate = new Date(log.date);
-// 				return logDate >= fromDate && logDate <= toDate;
-// 			});
+// 		if (fromDate) {
+// 			filteredLogs = filteredLogs.filter(
+// 				(log) => new Date(log.date) >= fromDate
+// 			);
 // 		}
 
-// 		// Limit the number of logs
-// 		if (req.query.limit) {
-// 			const limit = parseInt(req.query.limit);
-// 			logs = logs.slice(0, limit);
+// 		if (toDate) {
+// 			filteredLogs = filteredLogs.filter((log) => new Date(log.date) <= toDate);
 // 		}
+
+// 		filteredLogs = filteredLogs.slice(0, limit);
 
 // 		res.json({
 // 			username: user.username,
 // 			count: logs.length,
 // 			_id: user._id,
-// 			log: logs,
+// 			logs: filteredLogs,
 // 		});
 // 	} else {
-// 		res.send(`User with ID ${req.params._id} not found`);
+// 		res.status(404).send('User not found');
 // 	}
 // });
-
-app.get('/api/users/:_id/logs', (req, res) => {
-	const userId = req.params._id;
-	const fromDate = req.query.from ? new Date(req.query.from) : undefined;
-	const toDate = req.query.to ? new Date(req.query.to) : undefined;
-	const limit = parseInt(req.query.limit) || 10;
-
-	let user;
-
-	for (const userObject of users) {
-		if (userObject._id === userId) {
-			user = userObject;
-			break;
-		}
-	}
-
-	if (user) {
-		let filteredLogs = userNewLogs;
-		// let filteredLogs = user.logs;
-
-		if (fromDate) {
-			filteredLogs = filteredLogs.filter(
-				(log) => new Date(log.date) >= fromDate
-			);
-		}
-
-		if (toDate) {
-			filteredLogs = filteredLogs.filter((log) => new Date(log.date) <= toDate);
-		}
-
-		filteredLogs = filteredLogs.slice(0, limit);
-
-		res.json({
-			username: user.username,
-			count: logs.length,
-			_id: user._id,
-			logs: filteredLogs,
-		});
-	} else {
-		res.status(404).send('User not found');
-	}
-});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
 	console.log('Your app is listening on port ' + listener.address().port);
