@@ -119,7 +119,9 @@ app.get('/api/users/:_id/logs', (req, res) => {
 		}
 	}
 
-	console.log('THIS IS THE QUERY  ' + req.query);
+	console.log('THIS IS THE FROM DATE  ' + req.query.from);
+	console.log('THIS IS THE TO DATE  ' + req.query.to);
+	console.log('THIS IS THE LIMIT  ' + req.query.limit);
 
 	if (user) {
 		let logs = userNewLogs;
